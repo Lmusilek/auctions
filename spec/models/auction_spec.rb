@@ -41,4 +41,9 @@ RSpec.describe Auction, type: :model do
       
     expect(auction).to_not be_valid
   end
+
+  describe "Associations" do
+    it { should belong_to(:user).without_validating_presence }
+  end
+  
 end
