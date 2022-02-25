@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Auction, type: :model do
 
-  let(:auction_subject) { Auction.new(title: "Kukri", description: "Cool dagger", start_date: DateTime.now, end_date: DateTime.now + 1.week) }
+  let(:seller) { User.new(email: "jane@doe.com", password: "pw1234") }
+  let(:auction_subject) { Auction.new(title: "Kukri", description: "Cool dagger", start_date: DateTime.now, end_date: DateTime.now + 1.week, user_id: 1) }
 
   it "is valid with valid attributes" do
     auction = auction_subject
@@ -44,6 +45,6 @@ RSpec.describe Auction, type: :model do
 
   describe "Associations" do
     it { should belong_to(:user).without_validating_presence }
+    it { should have_many(:bids) }
   end
-  
 end
