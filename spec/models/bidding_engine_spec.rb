@@ -7,12 +7,20 @@ RSpec.describe BiddingEngine, type: :model do
   let(:auction) { Auction.create(title: 'Anything', description: 'Lorem ipsum', start_date: DateTime.now, end_date: DateTime.now + 1.week, user_id: seller.id) }
 
   describe ".bid!" do
-    it "create a new bid on an auction" do
+    it "create a new bid on an auction if bid is bigger than last bid on auction" do
       
-      BiddingEngine.bid!(100, bidder, auction)
+      described_class.bid!(100, bidder, auction)
       expect(auction.errors).to be_empty
 
       described_class.bid!(90, bidder, auction)
+      expect(auction.errors[:bid].first).to eq "must be bigger than the last bid on the auction"
+    end
+
+    it "cannot create a bid if its an equal amount as the last bid" do
+      described_class.bid!(100, bidder, auction)
+      expect(auction.errors).to be_empty
+
+      described_class.bid!(100, bidder, auction)
       expect(auction.errors[:bid].first).to eq "must be bigger than the last bid on the auction"
     end
   end
